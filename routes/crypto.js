@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/getClaimSignature/:walletAdrs/:tokenType', async (req, res) => {
   try {
     const { walletAdrs, tokenType } = req.params;
-    const walletAdrsFormated = ethers.utils.getAddress(walletAdrs);
+    const walletAdrsFormated = ethers.getAddress(walletAdrs);
 
     if (!walletAdrsFormated || !tokenType) {
       return res.status(400).json({ error: 'Les paramètres walletAdrsFormated et tokenType sont requis' });
