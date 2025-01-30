@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { connectDb, closeDb } from './db.js';
 import userRoutes from './routes/users.js';
+import cryptoRoutes from './routes/crypto.js';
 
 const app = express();
 const port = 3000;

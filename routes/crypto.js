@@ -1,6 +1,6 @@
 import express from 'express';
 import { ethers } from "ethers";  // Import correctly
-import { generateSignature } from '../utils/crypto.js';
+import generateSignature from '../utils/crypto.js';
 
 const router = express.Router();
 
