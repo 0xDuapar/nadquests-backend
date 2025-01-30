@@ -1,5 +1,5 @@
-// app.js
 import express from 'express';
+import cors from 'cors';
 import { connectDb, closeDb } from './db.js';
 import userRoutes from './routes/users.js';
 
@@ -8,6 +8,9 @@ const port = 3000;
 
 // Middleware pour analyser les données JSON
 app.use(express.json());
+
+// Configuration de CORS pour autoriser toutes les origines
+app.use(cors()); // Autorise toutes les requêtes de n'importe quelle origine
 
 // Utilisation des routes définies dans routes/users.js
 app.use('/api', userRoutes);
