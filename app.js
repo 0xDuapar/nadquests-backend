@@ -6,7 +6,6 @@ import userRoutes from './routes/users.js';
 const app = express();
 const port = 3000;
 
-// Middleware pour analyser les données JSON
 app.use(express.json());
 
 // Configuration de CORS pour autoriser toutes les origines
@@ -14,6 +13,8 @@ app.use(cors()); // Autorise toutes les requêtes de n'importe quelle origine
 
 // Utilisation des routes définies dans routes/users.js
 app.use('/api', userRoutes);
+
+app.use('/crypto', cryptoRoutes);
 
 // Connexion à la base de données et démarrage du serveur
 connectDb()
@@ -31,3 +32,5 @@ process.on('SIGINT', async () => {
   await closeDb();
   process.exit();
 });
+
+
