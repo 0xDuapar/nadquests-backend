@@ -15,6 +15,7 @@ Thumbs.db
 
 # dotenv environment variables file
 .env
+.env*
 
 # Build output
 dist/
