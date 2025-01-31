@@ -14,7 +14,7 @@ async function generateSignature(user, tokenType) {
   const key = ethers.hexlify(ethers.randomBytes(32)); // FIX: Use ethers.randomBytes correctly
 
   const messageHash = ethers.solidityPackedKeccak256(
-    ["address", "uint256", "bytes32"], // FIX: Use solidityPackedKeccak256 instead of solidityKeccak256
+    ["address", "uint256", "bytes32"],
     [user, tokenType, key]
   );
 

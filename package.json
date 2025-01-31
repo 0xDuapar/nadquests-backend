@@ -3,15 +3,24 @@
   "version": "1.0.0",
   "main": "app.js",
   "dependencies": {
+    "@superfaceai/passport-twitter-oauth2": "^1.2.4",
+    "axios": "^1.7.9",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "dotenv-flow": "^4.1.0",
     "ethers": "^6.13.5",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "joi": "^17.13.3",
+    "passport": "^0.7.0",
     "pg": "^8.13.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-api": "cross-env NODE_ENV=production node app.js",
+    "start-auth": "cross-env NODE_ENV=production node serverOAuth.js",
+    "dev-api": "cross-env NODE_ENV=development nodemon app.js",
+    "dev-auth": "cross-env NODE_ENV=development nodemon serverOAuth.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +33,9 @@
   "bugs": {
     "url": "https://github.com/0xDuapar/nadquests-backend/issues"
   },
-  "homepage": "https://github.com/0xDuapar/nadquests-backend#readme"
+  "homepage": "https://github.com/0xDuapar/nadquests-backend#readme",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.9"
+  }
 }
