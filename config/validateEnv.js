@@ -14,7 +14,7 @@ const envSchema = Joi.object({
   DB_HOST: Joi.string().required(),
   DB_NAME: Joi.string().required(),
   DB_PASSWORD: Joi.string().required(),
-  DB_PORT: Joi.number().default(5432),
+  DB_PORT: Joi.number().default(3306),
   PRIVATE_KEY: Joi.string().required(),
 }).unknown(); // Allow additional variables
 

@@ -1,37 +1,53 @@
 import express from 'express';
 import cors from 'cors';
-import { connectDb, closeDb } from './db.js';
+import { connectDb, closeDb } from './db.js';  // Importing connectDb and closeDb from db.js
 import userRoutes from './routes/users.js';
 import cryptoRoutes from './routes/crypto.js';
 
 const app = express();
-const port = 3000;
+const port = process.env.AUTH_PORT || 4000;  // Port from environment or default to 4000
 
 app.use(express.json());
 
-// Configuration de CORS pour autoriser toutes les origines
-app.use(cors()); // Autorise toutes les requêtes de n'importe quelle origine
+// Configure CORS (Cross-Origin Resource Sharing)
+app.use(cors());  // Allows requests from any origin
 
-// Utilisation des routes définies dans routes/users.js
+// Define routes
 app.use('/api', userRoutes);
-
 app.use('/crypto', cryptoRoutes);
 
-// Connexion à la base de données et démarrage du serveur
-connectDb()
-  .then(() => {
+// Async function to start the server after DB connection
+const startServer = async () => {
+  try {
+    // Connect to the database
+    await connectDb();
+    console.log('Connected to MySQL database');
+
+    // Start the server
     app.listen(port, () => {
-      console.log(`Serveur en cours d'exécution sur http://localhost:${port}`);
+      console.log(`Server is running on http://localhost:${port}`);
     });
-  })
-  .catch(err => {
-    console.error('Erreur lors de l\'initialisation de la base de données:', err);
-  });
+  } catch (err) {
+    console.error('Error during database initialization:', err);
+    process.exit(1); // Exit if DB connection fails
+  }
+};
 
-// Déconnexion de la base de données lorsque l'application se ferme
+// Start the server
+startServer();
+
+// Gracefully handle shutdown
 process.on('SIGINT', async () => {
-  await closeDb();
-  process.exit();
+  try {
+    // Close database connection
+    await closeDb();
+    console.log('Database connection closed');
+    
+    // Shutdown server
+    console.log('Server shutting down...');
+    process.exit(); // Exit after closing DB connection
+  } catch (err) {
+    console.error('Error during server shutdown:', err);
+    process.exit(1); // Exit with error if shutting down fails
+  }
 });
-
-

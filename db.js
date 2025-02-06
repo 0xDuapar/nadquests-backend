@@ -1,34 +1,41 @@
-// db.js
-import pkg from 'pg';
-import dotenv from 'dotenv';
+import dotenv from 'dotenv';  // Remplacer require par import
+import mysql from 'mysql2/promise';  // Utiliser mysql2 avec promesses
 
-// Charger les variables d'environnement du fichier .env
-dotenv.config();
+// Charge les variables d'environnement
+dotenv.config({ path: '.env.development' });
 
-const { Client } = pkg;
+let dbConnection = null;  // Déclare la variable de connexion en tant que 'null' par défaut
 
-// Configuration de la connexion à PostgreSQL avec les variables d'environnement
-const client = new Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+// Fonction pour établir la connexion à la base de données
+export const connectDb = async () => {
+  if (dbConnection) return dbConnection;  // Retourne la connexion existante si elle est déjà établie
 
-async function connectDb() {
   try {
-    await client.connect();
-    console.log('Connexion réussie à PostgreSQL !');
+    // Création de la connexion à la base de données
+    dbConnection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME
+    });
+    console.log('Connected to MySQL database');
+    return dbConnection;  // Retourne la connexion établie
   } catch (err) {
-    console.error('Erreur de connexion à PostgreSQL:', err);
-    throw err;
+    console.error('Error connecting to the database:', err);
+    throw err;  // Relance l'erreur pour qu'elle soit capturée par app.js
   }
-}
+};
 
-async function closeDb() {
-  await client.end();
-  console.log('Connexion fermée.');
-}
-
-export { connectDb, closeDb, client };
+// Fonction pour fermer la connexion à la base de données
+export const closeDb = async () => {
+  try {
+    if (dbConnection) {
+      await dbConnection.end();  // Ferme la connexion proprement
+      dbConnection = null;  // Réinitialise la connexion
+      console.log('Database connection closed');
+    }
+  } catch (err) {
+    console.error('Error closing the database connection:', err);
+    throw err;  // Relance l'erreur en cas de problème de fermeture
+  }
+};
